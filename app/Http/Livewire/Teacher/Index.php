@@ -2,9 +2,13 @@
 
 namespace App\Http\Livewire\Teacher;
 
+use Throwable;
 use App\Models\Subject;
 use App\Models\Teacher;
+use Exception;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Index extends Component
 {
@@ -31,34 +35,42 @@ class Index extends Component
         $this->dob = $teacher->dob;
         $this->phone = $teacher->phone;
         $this->address = $teacher->address;
-        $this->teacher_subjects = $teacher->subject->pluck('id');
+        $this->teacher_subjects = $teacher->subjects->pluck('id');
         $this->teacher_id = $teacher->id;
     }
 
     public function onSave()
     {
-        if ($this->teacher_id) {
-            $teacher = Teacher::findOrFail($this->teacher_id);
-            $teacher->code = $this->code;
-            $teacher->name = $this->name;
-            $teacher->name_latin = $this->name_latin;
-            $teacher->gender = $this->gender;
-            $teacher->dob = $this->dob;
-            $teacher->phone = $this->phone;
-            $teacher->address = $this->address;
-            $teacher->subjects->sync($this->teacher_subjects);
-        } else {
-            $teacher = new Teacher();
-            $teacher->code = $this->code;
-            $teacher->name = $this->name;
-            $teacher->name_latin = $this->name_latin;
-            $teacher->gender = $this->gender;
-            $teacher->dob = $this->dob;
-            $teacher->phone = $this->phone;
-            $teacher->address = $this->address;
-            $teacher->subjects->attact($this->teacher_subjects);
-        }
-        if ($teacher->save()) {
+        DB::beginTransaction();
+
+        try {
+            if ($this->teacher_id != null) {
+                $teacher = Teacher::findOrFail($this->teacher_id);
+                $teacher->code = $this->code;
+                $teacher->name = $this->name;
+                $teacher->name_latin = $this->name_latin;
+                $teacher->gender = $this->gender;
+                $teacher->dob = $this->dob;
+                $teacher->phone = $this->phone;
+                $teacher->address = $this->address;
+                $teacher->save();
+                $teacher->subjects()->sync($this->teacher_subjects);
+            } else {
+
+                $teacher = new Teacher();
+                $teacher->code = $this->code;
+                $teacher->name = $this->name;
+                $teacher->name_latin = $this->name_latin;
+                $teacher->gender = $this->gender;
+                $teacher->dob = $this->dob;
+                $teacher->phone = $this->phone;
+                $teacher->address = $this->address;
+                $teacher->save();
+                $teacher->subjects()->attach($this->teacher_subjects);
+            }
+
+            DB::commit();
+            //success
             $this->code = null;
             $this->name = null;
             $this->name_latin = null;
@@ -68,8 +80,30 @@ class Index extends Component
             $this->address = null;
             $this->teacher_subjects = null;
             $this->teacher_id = null;
+        } catch (Throwable $e) {
+
+            Log::error($e);
+            DB::rollBack();
+            //error
+        }
+    }
+
+    public function onDelete($id)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $teacher = Teacher::findOrFail($id);
+            $teacher->subjects()->detach($teacher->id);
+            $teacher->delete();
+            DB::commit();
             //success
-        } else {
+
+        } catch (Exception $ex) {
+
+            Log::error($ex);
+            DB::rollBack();
             //error
         }
     }

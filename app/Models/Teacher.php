@@ -13,4 +13,9 @@ class Teacher extends Model
     {
         return $this->belongsToMany(Subject::class);
     }
+
+    public function getGenderLabelAttribute()
+    {
+        return $this->gender == 1 ? 'Male' : 'Female';
+    }
 }

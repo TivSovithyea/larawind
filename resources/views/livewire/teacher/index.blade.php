@@ -38,9 +38,8 @@
                                         <div class="text-gray-400">{{ $item->code ?? 'N/A' }}</div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">{{ $item->code }}</td>
                                 <td class="px-6 py-4">{{ $item->name_latin }}</td>
-                                <td class="px-6 py-4">{{ $item->gender }}</td>
+                                <td class="px-6 py-4">{{ $item->gender_label }}</td>
                                 <td class="px-6 py-4">{{ $item->dob }}</td>
                                 <td class="px-6 py-4">{{ $item->phone }}</td>
                                 <td class="px-6 py-4">{{ $item->address }}</td>

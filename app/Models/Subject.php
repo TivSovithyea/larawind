@@ -14,4 +14,9 @@ class Subject extends Model
         'name',
         'short_name'
     ];
+
+    public function teachers()
+    {
+        return $this->belongsToMany(Teacher::class);
+    }
 }
