@@ -16,7 +16,7 @@ class Index extends Component
     use WithPagination;
 
     public $teachers, $subjects, $study_classes, $study_times;
-    public $day, $teacher_id, $subject_id, $study_class_id, $study_time_id, $teaching_id;
+    public $day = 1, $teacher_id, $subject_id, $study_class_id, $study_time_id = 1, $teaching_id;
 
     public function render()
     {
@@ -25,6 +25,7 @@ class Index extends Component
         $this->subjects = Subject::all();
         $this->study_classes = StudyClass::all();
         $this->study_times = StudyTime::all();
+        // dd($data);
         return view('livewire.teaching.index', compact('data'))->layout('layouts.app-livewire');
     }
 
@@ -41,7 +42,6 @@ class Index extends Component
 
     public function onSave()
     {
-        $teaching = Teaching::findOrFail($this->teaching_id);
         if ($this->teaching_id) {
             $teacher_exist = Teaching::where('teacher_id', $this->teacher_id)
                 ->where('study_time_id', $this->study_time_id)
@@ -53,7 +53,7 @@ class Index extends Component
                 //error
                 //teacher is busy in this time day
             }
-
+            $teaching = Teaching::findOrFail($this->teaching_id);
             $class_exist = Teaching::where('study_class_id', $this->study_class_id)
                 ->where('study_time_id', $this->study_time_id)
                 ->where('study_class_id', '!=', $teaching->study_class_id)
@@ -99,10 +99,10 @@ class Index extends Component
         if ($teaching->save()) {
             //success
             $this->teacher_id = null;
-            $this->day = null;
+            // $this->day = null;
             $this->subject_id = null;
             $this->study_class_id = null;
-            $this->study_time_id = null;
+            // $this->study_time_id = null;
             $this->teaching_id = null;
         } else {
             //error

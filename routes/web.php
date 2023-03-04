@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Livewire\ClassRoom;
 use App\Http\Livewire\Subject\Index as Subject;
 use App\Http\Livewire\StudyTime\Index as StudyTime;
@@ -33,3 +34,4 @@ Route::get('/study-years', StudyYear::class)->name('study-years');
 Route::get('/teachers', Teacher::class)->name('teachers');
 Route::get('/study-classes', StudyClass::class)->name('study-classes');
 Route::get('/teachings', Teaching::class)->name('teachings');
+Route::get('/schedules', [ScheduleController::class, 'index']);

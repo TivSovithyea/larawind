@@ -14,4 +14,9 @@ class StudyTime extends Model
         'name',
         'meridiem'
     ];
+
+    public function teachings()
+    {
+        return $this->hasMany(Teaching::class);
+    }
 }

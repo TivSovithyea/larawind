@@ -75,24 +75,24 @@
             <div class="flex flex-col justify-center">
                 <input type="hidden" wire:model="class_room_id">
                 <div class='w-full md:w-1/2 px-3 mb-6'>
-                    <label>Teacher</label>
-                    <select wire:model='teacher_id'
-                        class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500'
-                        id='grid-text-1' type='text' placeholder='teacher' name="teacher_id" required>
-                        <option value="">Choose</option>
-                        @foreach ($teachers as $teacher)
-                            <option value="{{$teacher->id}}">{{$teacher->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class='w-full md:w-1/2 px-3 mb-6'>
                     <label>Subject</label>
                     <select wire:model='subject_id'
                         class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500'
                         id='grid-text-1' type='text' placeholder='subject' name="subject_id" required>
                         <option value="">Choose</option>
                         @foreach ($subjects as $subject)
-                            <option value="{{$subject->id}}">{{$subject->name}}</option>
+                            <option value="{{$subject->id}}">{{$subject->short_name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class='w-full md:w-1/2 px-3 mb-6'>
+                    <label>Teacher</label>
+                    <select wire:model='teacher_id'
+                        class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500'
+                        id='grid-text-1' type='text' placeholder='teacher' name="teacher_id" required>
+                        <option value="">Choose</option>
+                        @foreach ($teachers as $teacher)
+                            <option value="{{$teacher->id}}">{{$teacher->id}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -114,7 +114,7 @@
                         id='grid-text-1' type='text' placeholder='time' name="study_time_id" required>
                         <option value="">Choose</option>
                         @foreach ($study_times as $study_time)
-                            <option value="{{$study_time->id}}">{{$study_time->name}}</option>
+                            <option value="{{$study_time->id}}">{{$study_time->code}}</option>
                         @endforeach
                     </select>
                 </div>
